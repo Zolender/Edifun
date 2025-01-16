@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/pages/home.dart';
 import 'reg.dart';
 import 'forgot.dart';
+import 'pages/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,13 +11,16 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Key for form
-  final TextEditingController _emailController = TextEditingController(); // Email input controller
-  final TextEditingController _passwordController = TextEditingController(); // Password input controller
+  final TextEditingController _emailController =
+      TextEditingController(); // Email input controller
+  final TextEditingController _passwordController =
+      TextEditingController(); // Password input controller
 
   @override
   void initState() {
@@ -44,14 +49,21 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 
   void _submitForm() {
+    //please Breye note that this is gonna need your part cause now it's just simulating a login
     if (_formKey.currentState!.validate()) {
-      // If form is valid
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Logging in...')),
+      // Simulate a successful login and navigate to HomePage
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Logging in...')));
+
+      // Replace this part with the real authentication logic later
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const home()), // Navigate to the HomePage
       );
-      // TODO: Implement login logic here
     }
   }
+  // TODO: Implement login logic here
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -180,13 +192,12 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => RegistrationPage()),
+                            MaterialPageRoute(
+                                builder: (context) => RegistrationPage()),
                           );
                         },
                         child: Text(
                           'Don’t have an account? Register here',
-
-
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: const Color.fromARGB(255, 24, 225, 239),
@@ -195,23 +206,24 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           ),
                         ),
                       ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
-                                  );
-                                },
-                                child: Text(
-                                  'Forgot Password?',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: const Color.fromARGB(167, 255, 255, 255),
-                                    fontSize: 14,
-                                    decoration: TextDecoration.none,
-                                  ),
-                                ),
-                              ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ForgotPasswordPage()),
+                          );
+                        },
+                        child: Text(
+                          'Forgot Password?',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: const Color.fromARGB(167, 255, 255, 255),
+                            fontSize: 14,
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -223,3 +235,4 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     );
   }
 }
+                                                                                                                              

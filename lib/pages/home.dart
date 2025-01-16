@@ -1,0 +1,19 @@
+import 'package:flutter/material.dart';
+
+class home extends StatelessWidget {
+  const home({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Home page",
+          style: TextStyle(fontSize: 30),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueGrey[900],
+      ),
+    );
+  }
+}
