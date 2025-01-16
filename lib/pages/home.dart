@@ -1,18 +1,65 @@
 import 'package:flutter/material.dart';
+import 'badges_widget.dart';
+import 'progress_summary_widget.dart';
+import 'announcements_widget.dart';
+import 'profile_page.dart';
 
-class home extends StatelessWidget {
-  const home({super.key});
+class HomePage extends StatelessWidget {
+  final VoidCallback toggleTheme;
+
+  const HomePage({super.key, required this.toggleTheme});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Home page",
-          style: TextStyle(fontSize: 30),
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: toggleTheme,
+          ),
+        ],
+      ),
+      drawer: _buildSidebar(context),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: const [
+            ProgressSummaryWidget(),
+            BadgesWidget(),
+            AnnouncementsWidget(),
+          ],
         ),
-        centerTitle: true,
-        backgroundColor: Colors.blueGrey[900],
+      ),
+    );
+  }
+
+  Widget _buildSidebar(BuildContext context) {
+    return Drawer(
+      child: Column(
+        children: [
+          UserAccountsDrawerHeader(
+            accountName: const Text('John Doe'),
+            accountEmail: const Text('johndoe@example.com'),
+            currentAccountPicture: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () => Navigator.pushReplacementNamed(context, '/login'),
+          ),
+        ],
       ),
     );
   }

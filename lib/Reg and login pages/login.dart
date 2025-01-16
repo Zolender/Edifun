@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'reg.dart';
 import 'forgot.dart';
-import 'pages/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,32 +10,22 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Key for form
-  final TextEditingController _emailController =
-      TextEditingController(); // Email input controller
-  final TextEditingController _passwordController =
-      TextEditingController(); // Password input controller
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-
-    // Initialize animation
     _controller = AnimationController(
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
       vsync: this,
     );
-
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    );
-
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
     _controller.forward();
   }
 
@@ -48,29 +37,11 @@ class _LoginPageState extends State<LoginPage>
     super.dispose();
   }
 
-  void _submitForm() {
-    //please Breye note that this is gonna need your part cause now it's just simulating a login
-    if (_formKey.currentState!.validate()) {
-      // Simulate a successful login and navigate to HomePage
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Logging in...')));
-
-      // Replace this part with the real authentication logic later
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const home()), // Navigate to the HomePage
-      );
-    }
-  }
-  // TODO: Implement login logic here
-
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
     }
-    // Simple email regex
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
     if (!emailRegex.hasMatch(value)) {
       return 'Please enter a valid email';
     }
@@ -87,12 +58,35 @@ class _LoginPageState extends State<LoginPage>
     return null;
   }
 
+  void _login() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    }
+  }
+
+  InputDecoration _buildInputDecoration(String hintText, IconData icon) {
+    return InputDecoration(
+      hintText: hintText,
+      prefixIcon: Icon(icon, color: Colors.white),
+      filled: true,
+      fillColor: Colors.white.withOpacity(0.1),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      hintStyle: const TextStyle(color: Colors.white),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Gradient
+          // Background gradient
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -102,76 +96,50 @@ class _LoginPageState extends State<LoginPage>
               ),
             ),
           ),
-          // Main Content
+          // Form with fade transition
           Center(
-            child: Padding(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(24.0),
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: Form(
-                  key: _formKey, // Attach form key
+                  key: _formKey,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // App Logo or Title
-                      Hero(
-                        tag: 'logo',
-                        child: Text(
-                          'EdiFun',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            letterSpacing: 1.5,
-                          ),
+                      const Text(
+                        'Login',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
-                      SizedBox(height: 40),
-                      // Email Field
+                      const SizedBox(height: 24),
+                      // Email field
                       TextFormField(
                         controller: _emailController,
-                        decoration: InputDecoration(
-                          hintText: 'Email Address',
-                          prefixIcon: Icon(Icons.email, color: Colors.white),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.1),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintStyle: TextStyle(color: Colors.white),
-                        ),
-                        style: TextStyle(color: Colors.white),
+                        decoration: _buildInputDecoration('Email Address', Icons.email),
                         keyboardType: TextInputType.emailAddress,
-                        validator: _validateEmail, // Validation logic
+                        style: const TextStyle(color: Colors.white),
+                        validator: _validateEmail,
                       ),
-                      SizedBox(height: 20),
-                      // Password Field
+                      const SizedBox(height: 16),
+                      // Password field
                       TextFormField(
                         controller: _passwordController,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          prefixIcon: Icon(Icons.lock, color: Colors.white),
-                          filled: true,
-                          fillColor: Colors.white.withOpacity(0.1),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          hintStyle: TextStyle(color: Colors.white),
-                        ),
-                        style: TextStyle(color: Colors.white),
+                        decoration: _buildInputDecoration('Password', Icons.lock),
                         obscureText: true,
-                        validator: _validatePassword, // Validation logic
+                        style: const TextStyle(color: Colors.white),
+                        validator: _validatePassword,
                       ),
-                      SizedBox(height: 20),
-                      // Login Button
+                      const SizedBox(height: 24),
+                      // Login button
                       ElevatedButton(
-                        onPressed: _submitForm,
+                        onPressed: _login,
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -186,43 +154,25 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      // Switch to Registration Page
-                      GestureDetector(
-                        onTap: () {
+                      const SizedBox(height: 16),
+                      // Links to Register and Forgot Password
+                      TextButton(
+                        onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => RegistrationPage()),
+                            MaterialPageRoute(builder: (context) => const RegistrationPage()),
                           );
                         },
-                        child: Text(
-                          'Don’t have an account? Register here',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 24, 225, 239),
-                            fontSize: 14,
-                            decoration: TextDecoration.none,
-                          ),
-                        ),
+                        child: const Text('Don’t have an account? Register', style: TextStyle(color: Colors.white)),
                       ),
-                      GestureDetector(
-                        onTap: () {
+                      TextButton(
+                        onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => ForgotPasswordPage()),
+                            MaterialPageRoute(builder: (context) => const ForgotPasswordPage()),
                           );
                         },
-                        child: Text(
-                          'Forgot Password?',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: const Color.fromARGB(167, 255, 255, 255),
-                            fontSize: 14,
-                            decoration: TextDecoration.none,
-                          ),
-                        ),
+                        child: const Text('Forgot Password?', style: TextStyle(color: Colors.white)),
                       ),
                     ],
                   ),
@@ -235,4 +185,3 @@ class _LoginPageState extends State<LoginPage>
     );
   }
 }
-                                                                                                                              
