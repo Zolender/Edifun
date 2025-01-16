@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "458232002096",
+    "firebase_url": "https://edifun-123-default-rtdb.firebaseio.com",
+    "project_id": "edifun-123",
+    "storage_bucket": "edifun-123.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458232002096:android:3922abca245273fce41ff5",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdgwM_65-9D08n8ThYZInYg4OkPqnl9VI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
