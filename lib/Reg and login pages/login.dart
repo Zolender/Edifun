@@ -3,6 +3,8 @@ import 'reg.dart';
 import 'forgot.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -193,7 +195,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           ),
                         ),
                       ),
-                      // Add this GestureDetector after the "Don’t have an account? Register here" Text
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(

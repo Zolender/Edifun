@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'terms_and_conditions.dart';
 
 class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({super.key});
+
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
