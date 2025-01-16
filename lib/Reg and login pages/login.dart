@@ -426,42 +426,24 @@ class _LoginPageState extends State<LoginPage>
                         ),
                       ),
                       SizedBox(height: 10),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => RegistrationPage()),
-                      //     );
-                      //   },
-                      //   child: Text(
-                      //     'Don’t have an account? Register here',
-                      //     textAlign: TextAlign.center,
-                      //     style: TextStyle(
-                      //       color: const Color.fromARGB(255, 24, 225, 239),
-                      //       fontSize: 14,
-                      //       decoration: TextDecoration.none,
-                      //     ),
-                      //   ),
-                      // ),
                       GestureDetector(
                         onTap: () {
-                                print("Navigating to Registration Page");
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => RegistrationPage()),
-                                );
-                              },
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegistrationPage()),
+                          );
+                        },
                         child: Text(
-                                'Don’t have an account? Register here',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                color: const Color.fromARGB(255, 24, 225, 239),
-                                fontSize: 14,
-                                decoration: TextDecoration.none,
-                             ),
-                             ),
+                          'Don’t have an account? Register here',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 24, 225, 239),
+                            fontSize: 14,
+                            decoration: TextDecoration.none,
                           ),
+                        ),
+                      ),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
