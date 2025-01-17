@@ -1,26 +1,94 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'badges_widget.dart';
-import 'progress_summary_widget.dart';
-import 'announcements_widget.dart';
 import 'profile_page.dart';
-import 'downloadable_page.dart';
-import 'downloaded_page.dart';
+import 'courses_page.dart';
 import 'settings_page.dart';
-import 'about_page.dart';
 
-class HomePage extends StatelessWidget {
-  final VoidCallback toggleTheme;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-  const HomePage({super.key, required this.toggleTheme});
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Display welcome snackbar when the page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showEnhancedWelcomeSnackbar(context);
+    });
+  }
+
+  // Show enhanced welcome snackbar
+  void showEnhancedWelcomeSnackbar(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    final name = user?.displayName ?? 'User';
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            Icon(Icons.waving_hand, color: Colors.yellow, size: 28),
+            const SizedBox(width: 10),
+            Text(
+              'Welcome, $name!',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.blueAccent,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 4),
+        action: SnackBarAction(
+          label: 'Dismiss',
+          textColor: Colors.white,
+          onPressed: () {
+            // Optional: Handle dismiss action
+          },
+        ),
+      ),
+    );
+  }
+
+  // Handle navigation for BottomNavigationBar
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        // Stay on Home
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CoursesPage()),
+        ).then((_) => setState(() => _selectedIndex = 0));
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ProfilePage()),
+        ).then((_) => setState(() => _selectedIndex = 0));
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text(
+          'Home',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
         actions: [
-          // Settings Button
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
@@ -30,177 +98,133 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
-          // Theme Toggle Button
-          IconButton(
-            icon: const Icon(Icons.brightness_6),
-            onPressed: toggleTheme,
-          ),
         ],
       ),
-      drawer: _buildSidebar(context),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Welcome Back!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
             // Announcements Section
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              elevation: 4,
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: AnnouncementsWidget(),
+            const Text(
+              'Latest Announcements',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 150,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _buildAnnouncementCard('New Course Available', 'Check out the new AI course!', Icons.school),
+                  _buildAnnouncementCard('Update', 'We’ve improved your dashboard.', Icons.update),
+                  _buildAnnouncementCard('Event', 'Join our live Q&A session!', Icons.event),
+                ],
               ),
             ),
             const SizedBox(height: 16),
             // Badges Section
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              elevation: 4,
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: BadgesWidget(),
-              ),
+            const Text(
+              'Your Achievements',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildBadge('Top Learner', Icons.star, Colors.amber),
+                _buildBadge('Course Completer', Icons.check_circle, Colors.green),
+                _buildBadge('Quiz Master', Icons.quiz, Colors.blue),
+              ],
             ),
             const SizedBox(height: 16),
             // Progress Summary Section
-            Card(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              elevation: 4,
-              child: const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: ProgressSummaryWidget(),
-              ),
+            const Text(
+              'Your Progress',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildProgressCard('Course 1', 0.7, Colors.blue),
+                _buildProgressCard('Course 2', 0.4, Colors.orange),
+                _buildProgressCard('Course 3', 0.9, Colors.green),
+              ],
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Courses',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Helper to build an announcement card
+  Widget _buildAnnouncementCard(String title, String description, IconData icon) {
+    return Card(
+      color: Colors.lightBlue.shade50,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 4,
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 36, color: Colors.blue),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(description, style: const TextStyle(fontSize: 14)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSidebar(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          // User Info Section
-          Container(
-            color: Colors.blue,
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ProfilePage()),
-                    );
-                  },
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'John Doe',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const Text(
-                  'johndoe@example.com',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white70,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // Discover Content Option
-          ListTile(
-            leading: const Icon(Icons.cloud_download),
-            title: const Text('Discover Content'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const DownloadablePage()),
-              );
-            },
-          ),
-          // Downloaded Option
-          ListTile(
-            leading: const Icon(Icons.download_done),
-            title: const Text('Downloaded'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const DownloadedPage()),
-              );
-            },
-          ),
-          // Settings Option
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()),
-              );
-            },
-          ),
-          // About Option
-          ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('About'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AboutPage()),
-              );
-            },
-          ),
-          // Logout Option
-          ListTile(
-            leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text('Logout', style: TextStyle(color: Colors.red)),
-            onTap: () async {
-              bool confirmLogout = await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Confirm Logout'),
-                    content: const Text('Are you sure you want to logout?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: const Text('Logout'),
-                      ),
-                    ],
-                  );
-                },
-              );
-              if (confirmLogout) {
-                await FirebaseAuth.instance.signOut();
-                Navigator.pushReplacementNamed(context, '/login');
-              }
-            },
-          ),
-        ],
-      ),
+  // Helper to build a badge
+  Widget _buildBadge(String title, IconData icon, Color color) {
+    return Column(
+      children: [
+        Icon(icon, size: 48, color: color),
+        const SizedBox(height: 4),
+        Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+      ],
+    );
+  }
+
+  // Helper to build a progress card
+  Widget _buildProgressCard(String courseName, double progress, Color color) {
+    return Column(
+      children: [
+        CircularProgressIndicator(
+          value: progress,
+          backgroundColor: Colors.grey[300],
+          color: color,
+        ),
+        const SizedBox(height: 8),
+        Text(courseName, style: const TextStyle(fontSize: 14)),
+      ],
     );
   }
 }

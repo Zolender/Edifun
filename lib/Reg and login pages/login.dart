@@ -57,10 +57,6 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(
-            toggleTheme: () {
-              // Define your theme toggle logic here
-              print('Theme toggled!');
-            },
           ),
         ),
       );
