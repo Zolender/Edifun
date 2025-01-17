@@ -3,8 +3,8 @@ import 'badges_widget.dart';
 import 'progress_summary_widget.dart';
 import 'announcements_widget.dart';
 import 'profile_page.dart';
-import 'downloads_page.dart';
-import 'feature_page.dart'; // Replace with the specific feature you want
+import 'downloadable_page.dart';
+import 'downloaded_page.dart'; // Replace with the specific feature you want
 import 'package:firebase_auth/firebase_auth.dart';
 
 /// HomePage widget representing the main screen of the app.
