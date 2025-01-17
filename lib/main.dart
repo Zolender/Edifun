@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'authentication/login.dart';
 import 'authentication/forgot.dart';
 import 'authentication/reg.dart';
+import 'authentication/terms_and_conditions.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'authentication/splash.dart';
 
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
+  // initilizing firebase
   await Firebase.initializeApp(
     options: FirebaseOptions(
     apiKey: "AIzaSyAO4cBodwdNWfpTQC4FyOwkSpj2tmELVyY",
@@ -19,6 +20,7 @@ void main() async{
     messagingSenderId: "458232002096",
     appId: "1:458232002096:web:df5aaf5b86b43af8e41ff5",
     measurementId: "G-RNZJR8ZMD5"));
+    // initialize app
   runApp(MyApp());
 }
 class MyApp extends StatelessWidget {
@@ -31,12 +33,14 @@ class MyApp extends StatelessWidget {
       // adding routes to the app
       initialRoute: '/',
       routes: {
+        '/': (context) => SplashScreen(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegistrationPage(),
         '/forgot': (context) => ForgotPasswordPage(),
+        '/terms': (context) => TermsConditionsPage(),
+
 
       },
-      home:LoginPage() ,
     );
   }
 }
