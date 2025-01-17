@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
 
@@ -28,14 +28,27 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return null;
   }
 
-  void _submitForgotPasswordForm() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Implement forgot password functionality
+// implementing the firbase password reset  
+  Future<void> _resetPassword() async {
+    try{
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: _emailController.text);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Password reset email sent!')),
       );
+    } on FirebaseAuthException catch (e){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("An error ocurred, please try again later")),
+      );
     }
   }
+//  had to comment this out because it was not used
+  // void _submitForgotPasswordForm() {
+  //   if (_formKey.currentState!.validate()) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Password reset email sent!')),
+  //     );
+  //   }
+  // }
 
   InputDecoration _buildInputDecoration(String hintText, IconData icon) {
     return InputDecoration(
@@ -102,7 +115,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       const SizedBox(height: 20),
                       // Reset Password Button
                       ElevatedButton(
-                        onPressed: _submitForgotPasswordForm,
+                        onPressed: _resetPassword,
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
