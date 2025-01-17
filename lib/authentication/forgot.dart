@@ -135,7 +135,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       const SizedBox(height: 20),
                       // Back to Login
                       GestureDetector(
-                        onTap: () => Navigator.pop(context),
+                        onTap: () => Navigator.pushNamed(context, '/login'),
                         child: const Text(
                           'Back to Login',
                           textAlign: TextAlign.center,

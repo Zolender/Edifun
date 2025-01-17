@@ -3,7 +3,7 @@ import 'badges_widget.dart';
 import 'progress_summary_widget.dart';
 import 'announcements_widget.dart';
 import 'profile_page.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 class HomePage extends StatelessWidget {
   final VoidCallback toggleTheme;
 
@@ -57,7 +57,11 @@ class HomePage extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
-            onTap: () => Navigator.pushReplacementNamed(context, '/login'),
+            // Logout and navigate to login page
+            onTap: () => {
+              Navigator.pushReplacementNamed(context, '/login'),
+              FirebaseAuth.instance.signOut(),
+            }
           ),
         ],
       ),

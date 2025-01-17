@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'Reg and login pages/login.dart';
+import 'authentication/login.dart';
+import 'authentication/forgot.dart';
+import 'authentication/reg.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
@@ -26,6 +28,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      // adding routes to the app
+      initialRoute: '/',
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegistrationPage(),
+        '/forgot': (context) => ForgotPasswordPage(),
+
+      },
       home:LoginPage() ,
     );
   }
