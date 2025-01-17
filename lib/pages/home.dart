@@ -1,13 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'badges_widget.dart';
 import 'progress_summary_widget.dart';
 import 'announcements_widget.dart';
 import 'profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 class HomePage extends StatelessWidget {
   final VoidCallback toggleTheme;
 
   const HomePage({super.key, required this.toggleTheme});
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      // Sign out the user from FirebaseAuth
+      await FirebaseAuth.instance.signOut();
+
+      // Remove user ID from local storage
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove('userID');
+
+      // Navigate to the login page
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      // Handle errors during sign-out
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error signing out: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +70,7 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const ProfilePage()),
                 );
               },
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundImage: NetworkImage('https://via.placeholder.com/150'),
               ),
             ),
@@ -57,11 +78,7 @@ class HomePage extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Logout'),
-            // Logout and navigate to login page
-            onTap: () => {
-              Navigator.pushReplacementNamed(context, '/login'),
-              FirebaseAuth.instance.signOut(),
-            }
+            onTap: () => _signOut(context), // Call _signOut on tap
           ),
         ],
       ),
