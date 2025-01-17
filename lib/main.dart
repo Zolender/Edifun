@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
 import 'Reg and login pages/login.dart';
-void main() => runApp(MyApp());
+import 'package:firebase_core/firebase_core.dart';
 
+
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+    apiKey: "AIzaSyAO4cBodwdNWfpTQC4FyOwkSpj2tmELVyY",
+    authDomain: "edifun-123.firebaseapp.com",
+    databaseURL: "https://edifun-123-default-rtdb.firebaseio.com",
+    projectId: "edifun-123",
+    storageBucket: "edifun-123.firebasestorage.app",
+    messagingSenderId: "458232002096",
+    appId: "1:458232002096:web:df5aaf5b86b43af8e41ff5",
+    measurementId: "G-RNZJR8ZMD5"));
+  runApp(MyApp());
+}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

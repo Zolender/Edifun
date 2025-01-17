@@ -148,7 +148,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Title
                       const Text(
                         'Register',
                         textAlign: TextAlign.center,
@@ -159,7 +158,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      // Name Field
                       TextFormField(
                         controller: _nameController,
                         decoration: _buildInputDecoration('Enter your name', Icons.person),
@@ -167,7 +165,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         validator: _validateName,
                       ),
                       const SizedBox(height: 16),
-                      // Username Field
                       TextFormField(
                         controller: _usernameController,
                         decoration: _buildInputDecoration('Enter your username', Icons.person_outline),
@@ -175,7 +172,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         validator: _validateUsername,
                       ),
                       const SizedBox(height: 16),
-                      // Email Field
                       TextFormField(
                         controller: _emailController,
                         decoration: _buildInputDecoration('Enter your email', Icons.email),
@@ -183,7 +179,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         validator: _validateEmail,
                       ),
                       const SizedBox(height: 16),
-                      // Password Field
                       TextFormField(
                         controller: _passwordController,
                         decoration: _buildInputDecoration('Enter your password', Icons.lock),
@@ -192,7 +187,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         validator: _validatePassword,
                       ),
                       const SizedBox(height: 16),
-                      // Confirm Password Field
                       TextFormField(
                         controller: _confirmPasswordController,
                         decoration: _buildInputDecoration('Confirm your password', Icons.lock_outline),
@@ -201,7 +195,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         validator: _validateConfirmPassword,
                       ),
                       const SizedBox(height: 16),
-                      // Agree to Terms
                       Row(
                         children: [
                           Checkbox(
@@ -225,7 +218,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      // Register Button
                       _isLoading
                           ? const Center(child: CircularProgressIndicator(color: Colors.white))
                           : ElevatedButton(
@@ -247,7 +239,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               ),
                             ),
                       const SizedBox(height: 16),
-                      // Back to Login
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: const Text(
