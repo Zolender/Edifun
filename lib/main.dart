@@ -5,7 +5,7 @@ import 'authentication/reg.dart';
 import 'authentication/terms_and_conditions.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'authentication/splash.dart';
-import 'pages/home.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +38,8 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegistrationPage(),
         '/forgot': (context) => ForgotPasswordPage(),
         '/terms': (context) => TermsConditionsPage(),
-        '/home': (context) => HomePage(toggleTheme: () {}),
+
+
       },
     );
   }

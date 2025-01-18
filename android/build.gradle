@@ -4,17 +4,6 @@ allprojects {
         mavenCentral()
     }
 }
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.1'  // Update this line to 8.2.1 or higher
-        classpath 'com.google.gms:google-services:4.3.15' // Ensure this is up to date as well
-    }
-}
-
 
 rootProject.buildDir = "../build"
 subprojects {
