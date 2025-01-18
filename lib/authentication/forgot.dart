@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, deprecated_member_use
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +37,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Password reset email sent!')),
       );
-    } on FirebaseAuthException {
+    } on FirebaseAuthException catch (e){
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("An error ocurred, please try again later")),
       );
