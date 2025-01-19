@@ -24,36 +24,39 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     });
   }
 
-  // Show enhanced welcome snackbar
-  void showEnhancedWelcomeSnackbar(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-    final name = user?.displayName ?? 'User';
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            Icon(Icons.waving_hand, color: Colors.yellow, size: 28),
-            const SizedBox(width: 10),
-            Text(
-              'Welcome, $name!',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.blueAccent,
-        behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 4),
-        action: SnackBarAction(
-          label: 'Dismiss',
-          textColor: Colors.white,
-          onPressed: () {
-            // Optional: Handle dismiss action
-          },
-        ),
+ // Show enhanced welcome snackbar
+void showEnhancedWelcomeSnackbar(BuildContext context) {
+  final user = FirebaseAuth.instance.currentUser;
+  final name = user?.displayName ?? 'User';
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Row(
+        children: [
+          Icon(Icons.waving_hand, color: Colors.yellow, size: 28),
+          const SizedBox(width: 10),
+          Text(
+            'Welcome, $name!',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
-    );
-  }
+      backgroundColor: Colors.blueAccent,
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 4),
+      action: SnackBarAction(
+        label: 'Dismiss',
+        textColor: Colors.white,
+        onPressed: () {
+          // Dismiss snackbar
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },
+      ),
+    ),
+  );
+}
+
 
   // Handle navigation for BottomNavigationBar
   void _onItemTapped(int index) {
@@ -86,8 +89,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       appBar: AppBar(
         title: const Text(
           'Home',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
+        backgroundColor: Colors.lightBlue,
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -107,12 +111,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           children: [
             // Announcements Section
             const Text(
-              'Latest Announcements',
+              'Announcements',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             SizedBox(
-              height: 150,
+              height: 200,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
@@ -122,7 +126,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 32),
             // Badges Section
             const Text(
               'Your Achievements',
