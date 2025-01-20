@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'terms_and_conditions.dart';
+import 'termsofuse.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login.dart';
+import './login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegistrationPage extends StatefulWidget {

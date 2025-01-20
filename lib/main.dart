@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'authentication/login.dart';
-import 'authentication/forgot.dart';
-import 'authentication/reg.dart';
-import 'authentication/terms_and_conditions.dart';
+import 'authentication/login_page.dart';
+import 'authentication/forgot_page.dart';
+import 'authentication/registration_page.dart';
+import 'authentication/termsofuse.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'authentication/splash.dart';
+import 'authentication/splash_screen.dart';
 
 
 
