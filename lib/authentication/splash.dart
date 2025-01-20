@@ -1,31 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'login.dart';
+import '../pages/home.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
-    _showSplashScreen();
+
+    // Initialize animation controller for fade and bounce effect
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+    _controller.forward();
+
+    // Start splash logic
+    _startSplashTimer();
   }
 
-  void _showSplashScreen() async {
-    await Future.delayed(Duration(seconds: 2)); // Display splash screen for 2.5 seconds
-    _checkLogin();
+  // Logic to determine the next screen
+  void _startSplashTimer() async {
+    await Future.delayed(const Duration(seconds: 4)); // Duration of splash screen
+    _navigateToNext();
   }
 
-  void _checkLogin() async {
+  void _navigateToNext() {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      Navigator.pushReplacementNamed(context, '/login');
-    }
+    // User is authenticated, navigate to the Home page directly
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()), // Replace HomePage() with your actual home widget
+    );
+  } else {
+    // User is not authenticated, navigate to the Login page directly
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()), // Replace LoginPage() with your actual login widget
+    );
+  }
   }
 
   @override
@@ -36,21 +60,46 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'EdiFun',
-              style: TextStyle(
-                fontSize: 40,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+            // Enhanced EdiFun text with gradient and bounce effect
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: 1 + (_fadeAnimation.value * 0.1), // Bounce effect
+                  child: ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return LinearGradient(
+                        colors: [Colors.lightBlueAccent, Colors.white],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds);
+                    },
+                    child: const Text(
+                      'EdiFun',
+                      style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white, // Color masked by gradient
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(
+            const SizedBox(height: 20),
+            // Circular progress indicator
+            const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

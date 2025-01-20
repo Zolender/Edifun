@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'courses_page.dart';
 import 'settings_page.dart';
 

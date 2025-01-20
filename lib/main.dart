@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'authentication/splash.dart';
 
 
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // initilizing firebase
