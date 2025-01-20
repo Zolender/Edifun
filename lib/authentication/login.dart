@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'reg.dart';
 import 'forgot.dart';
 
@@ -12,7 +11,7 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
- 
+
 class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -53,19 +52,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         password: _passwordController.text.trim(),
       );
 
-      // Save user ID to local storage
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userID', FirebaseAuth.instance.currentUser!.uid);
-
       // Navigate to HomePage
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(
-            toggleTheme: () {
-              // Define your theme toggle logic here
-              print('Theme toggled!');
-            },
           ),
         ),
       );
