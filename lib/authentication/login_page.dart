@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../pages/home.dart';
 import '../authentication/registration_page.dart';
 import '../authentication/forgot_page.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,6 +20,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -41,40 +44,54 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   }
 
   Future<void> _submitForm() async {
-  if (_formKey.currentState!.validate()) {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      // Firebase authentication login
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      // Navigate to HomePage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(
-          ),
-        ),
-      );
-    } on FirebaseAuthException catch (e) {
-      String message = 'An error occurred';
-      if (e.code == 'user-not-found') {
-        message = 'No user found for that email';
-      } else if (e.code == 'wrong-password') {
-        message = 'Wrong password provided';
-      }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-    } finally {
+    if (_formKey.currentState!.validate()) {
       setState(() {
-        _isLoading = false;
+        _isLoading = true;
       });
+      try {
+        // Firebase authentication login
+        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+        // Fetch user profile from Firestore
+        final user = userCredential.user;
+        if (user != null) {
+          DocumentSnapshot doc =
+              await _firestore.collection('users').doc(user.uid).get();
+
+          if (doc.exists) {
+            final userData = doc.data() as Map<String, dynamic>;
+            // Navigate to HomePage with user data
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomePage(userData: userData),
+              ),
+            );
+          } else {
+            // Handle case where user profile is not found
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('User profile not found')),
+            );
+          }
+        }
+      } on FirebaseAuthException catch (e) {
+        String message = 'An error occurred';
+        if (e.code == 'user-not-found') {
+          message = 'No user found for that email';
+        } else if (e.code == 'wrong-password') {
+          message = 'Wrong password provided';
+        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
-}
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {

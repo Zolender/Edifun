@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import './login_page.dart';
 import '../pages/home.dart';
 
@@ -36,23 +37,38 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _navigateToNext();
   }
 
-  void _navigateToNext() {
-    User? user = FirebaseAuth.instance.currentUser;
+void _navigateToNext() async {
+  User? user = FirebaseAuth.instance.currentUser;
 
-    if (user != null) {
-    // User is authenticated, navigate to the Home page directly
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()), // Replace HomePage() with your actual home widget
-    );
-  } else {
-    // User is not authenticated, navigate to the Login page directly
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()), // Replace LoginPage() with your actual login widget
-    );
+  if (user != null) {
+    // Fetch user data from Firestore
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (snapshot.exists) {
+        final userData = snapshot.data();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(userData: userData ?? {}),
+          ),
+        );
+        return;
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
   }
-  }
+
+  // Navigate to Login Page if user is null or fetch fails
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => LoginPage()),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
