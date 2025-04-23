@@ -13,11 +13,11 @@ void main() async{
   // initilizing firebase
   await Firebase.initializeApp(
     options: FirebaseOptions(
-    apiKey: "AIzaSyAO4cBodwdNWfpTQC4FyOwkSpj2tmELVyY",
-    authDomain: "edifun-123.firebaseapp.com",
-    databaseURL: "https://edifun-123-default-rtdb.firebaseio.com",
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
     projectId: "edifun-123",
-    storageBucket: "edifun-123.firebasestorage.app",
+    storageBucket: "",
     messagingSenderId: "458232002096",
     appId: "1:458232002096:web:df5aaf5b86b43af8e41ff5",
     measurementId: "G-RNZJR8ZMD5"));
